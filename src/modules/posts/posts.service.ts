@@ -14,7 +14,7 @@ export class PostsService {
   async createPost({ body, userId, userName }) {
     const { title, content, categories } = body;
     if (categories.length === 0) {
-      throw new NotFoundException('Post should be at least one categorie');
+      throw new BadRequestException('Post should be at least one categorie');
     }
     const postCreated = await this.postModel.create({
       title,
@@ -28,6 +28,7 @@ export class PostsService {
     }
     return { message: 'Post created successfully', id: postCreated._id };
   }
+
   async getPosts(page = 1, limit = 10): Promise<Post[]> {
     const skip = (page - 1) * limit;
     const posts = await this.postModel.find().skip(skip).limit(limit).lean();
@@ -49,7 +50,7 @@ export class PostsService {
     const { id, role } = req.user;
     const postToUpdate = await this.getPostById(idParam);
     if (!(postToUpdate.userId.toString() === id || role === 'admin')) {
-      throw new NotFoundException('You can only upd your own post');
+      throw new BadRequestException('You can only upd your own post');
     }
     const updatedPost = await this.postModel
       .findByIdAndUpdate(idParam, body)
@@ -64,7 +65,7 @@ export class PostsService {
     const { id, role } = req.user;
     const postToDelete = await this.getPostById(idParam);
     if (!(postToDelete.userId.toString() === id || role === 'admin')) {
-      throw new NotFoundException('You can only delete your own post');
+      throw new BadRequestException('You can only delete your own post');
     }
     const postDeleted = await this.postModel.findByIdAndDelete(idParam);
     if (!postDeleted) {

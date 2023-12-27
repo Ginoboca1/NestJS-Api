@@ -17,7 +17,9 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorators';
 import { Role } from 'src/common/enums/role.enum';
 import { UserRequest } from 'src/common/interfaces/user-request';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -25,6 +27,9 @@ export class UsersController {
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
+  @ApiResponse({ status: 200, description: 'Return a users list' })
+  @ApiResponse({ status: 404, description: 'There are no users here' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async getAllUsers(@Req() req: UserRequest, @Res() res: Response) {
     try {
       const data = await this.usersService.getUsers();
@@ -37,6 +42,12 @@ export class UsersController {
   @Roles(Role.ADMIN, Role.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/:id')
+  @ApiResponse({
+    status: 200,
+    description: 'Return user wich match with the ID provided',
+  })
+  @ApiResponse({ status: 404, description: 'User not founded' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async getUserById(@Param('id') id: string, @Res() res: Response) {
     try {
       const data = await this.usersService.getUserById(id);
@@ -49,6 +60,17 @@ export class UsersController {
   @Roles(Role.ADMIN, Role.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Put('/:id')
+  @ApiResponse({ status: 200, description: 'Update user' })
+  @ApiResponse({
+    status: 401,
+    description: 'You can only edit your own profile',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Role and password cannot be changed',
+  })
+  @ApiResponse({ status: 404, description: 'User not founded' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async updateUser(
     @Param('id') id: string,
     @Body() body: UpdateUserDto,
@@ -66,6 +88,17 @@ export class UsersController {
 
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiResponse({ status: 200, description: 'Delete user' })
+  @ApiResponse({
+    status: 404,
+    description: 'User not founded',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid User ID',
+  })
+  @ApiResponse({ status: 404, description: 'User not founded' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @Delete('/:id')
   async deleteUser(@Param('id') id: string, @Res() res: Response) {
     try {

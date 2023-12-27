@@ -14,7 +14,7 @@ export class AdminsService {
   async getAdmins(): Promise<User[]> {
     const users = await this.userModel.find().select('-password').lean();
     if (!users || users.length === 0) {
-      throw new NotFoundException('There are no users here');
+      throw new NotFoundException('There are no admins here');
     }
     return users;
   }
