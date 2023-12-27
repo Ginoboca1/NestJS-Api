@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsEmail, Matches } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsEmail,
+  Matches,
+  IsOptional,
+} from 'class-validator';
 import { Role } from 'src/common/enums/role.enum';
 
 export class Login {
@@ -13,7 +19,8 @@ export class Login {
 }
 
 export class SignUp extends Login {
-  name: string;
+  @IsOptional()
+  name?: string;
 
   @IsEmail()
   email: string;

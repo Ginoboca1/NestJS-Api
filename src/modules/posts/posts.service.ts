@@ -13,6 +13,9 @@ export class PostsService {
   constructor(@InjectModel(Post.name) private postModel: Model<Post>) {}
   async createPost({ body, userId, userName }) {
     const { title, content, categories } = body;
+    if (categories.length === 0) {
+      throw new NotFoundException('Post should be at least one categorie');
+    }
     const postCreated = await this.postModel.create({
       title,
       author: userName,
