@@ -20,7 +20,10 @@ export class AdminsService {
   }
 
   async getAdminsPosts(): Promise<Post[]> {
-    const admins = await this.postModel.find().lean();
-    return admins;
+    const postsByAdmins = await this.postModel.find().lean();
+    if (!postsByAdmins) {
+      throw new NotFoundException('There are no admins posts here');
+    }
+    return postsByAdmins;
   }
 }

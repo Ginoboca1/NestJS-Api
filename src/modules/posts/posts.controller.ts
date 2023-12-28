@@ -21,7 +21,7 @@ import { Response } from 'express';
 import { PostDto } from './dto/post';
 import { IPost } from 'src/common/interfaces/post';
 import { UserRequest } from 'src/common/interfaces/user-request';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('posts')
 @Roles(Role.ADMIN, Role.USER)
@@ -30,6 +30,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
   @Post()
+  @ApiOperation({ summary: 'Create a post' })
   @ApiResponse({
     status: 201,
     description: 'Return a successfully message and create a post',
@@ -63,6 +64,7 @@ export class PostsController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Return all posts' })
   @ApiResponse({
     status: 200,
     description: 'Return a posts list',
@@ -90,9 +92,12 @@ export class PostsController {
   }
 
   @Get('/search')
+  @ApiOperation({
+    summary: 'Returns the posts that match the search parameters',
+  })
   @ApiResponse({
     status: 200,
-    description: 'Returns the posts that match the parameters',
+    description: 'Returns the posts that match the search parameters',
   })
   @ApiResponse({ status: 404, description: 'Provide a title' })
   @ApiResponse({ status: 404, description: 'Not posts founded' })
@@ -112,9 +117,10 @@ export class PostsController {
   }
 
   @Get('/filter')
+  @ApiOperation({ summary: 'Filter posts by author or category' })
   @ApiResponse({
     status: 200,
-    description: 'Returns the posts that match the params',
+    description: 'Filter posts by author or category',
   })
   @ApiResponse({
     status: 400,
@@ -139,6 +145,7 @@ export class PostsController {
   }
 
   @Get('/:id')
+  @ApiOperation({ summary: 'Returns a post wich match with the ID' })
   @ApiResponse({
     status: 200,
     description: 'Returns a post wich match with the ID',
@@ -158,6 +165,7 @@ export class PostsController {
   }
 
   @Put('/:id')
+  @ApiOperation({ summary: 'Update post wich match with the ID provided' })
   @ApiResponse({
     status: 200,
     description: 'Update post wich match with the ID provided',
@@ -186,6 +194,7 @@ export class PostsController {
   }
 
   @Delete('/:id')
+  @ApiOperation({ summary: 'Delete post wich match with the ID provided' })
   @ApiResponse({
     status: 200,
     description: 'Delete post wich match with the ID provided',
@@ -213,9 +222,10 @@ export class PostsController {
   }
 
   @Get('/user/:userId')
+  @ApiOperation({ summary: 'Returns posts from a specific user' })
   @ApiResponse({
     status: 200,
-    description: 'Returns all posts from a specific user',
+    description: 'Returns posts from a specific user',
   })
   @ApiResponse({
     status: 404,

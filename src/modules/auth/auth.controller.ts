@@ -4,7 +4,7 @@ import { Response } from 'express';
 import { SignUp } from './dto/auth-dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { UserRequest } from 'src/common/interfaces/user-request';
-import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -12,6 +12,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
+  @ApiOperation({ summary: 'Create an user' })
   @ApiResponse({
     status: 201,
     description: 'Return a successfully message and Create an user',
@@ -29,6 +30,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
+  @ApiOperation({ summary: 'Assign a token an user' })
   @ApiResponse({
     status: 200,
     description: 'Return a successfully message and user token',
