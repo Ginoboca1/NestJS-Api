@@ -36,6 +36,6 @@ export class SignUp extends Login {
   })
   @ApiProperty({ example: 'Example1234.', description: 'password' })
   password: string;
-  @ApiProperty({ example: 'user, admin', description: 'role' })
+  @ApiProperty({ example: 'user', description: 'role' })
   role: Role;
 }

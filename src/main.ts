@@ -12,6 +12,7 @@ async function bootstrap() {
     )
     .setVersion('1.0')
     .addTag('users')
+    .addBearerAuth()
     .build();
   const corsOptions = {
     origin: 'http://localhost:5173',
@@ -21,7 +22,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('/api/docs', app, document);
   await app.listen(3000, () => {
     console.log(`Server listen in port ${process.env.PORT}`);
   });

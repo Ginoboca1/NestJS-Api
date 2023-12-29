@@ -30,7 +30,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  @ApiOperation({ summary: 'Assign a token an user' })
+  @ApiOperation({ summary: 'Assign token to a user' })
   @ApiResponse({
     status: 200,
     description: 'Return a successfully message and user token',

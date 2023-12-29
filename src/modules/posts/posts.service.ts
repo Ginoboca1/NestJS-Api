@@ -124,8 +124,8 @@ export class PostsService {
       );
     }
     const posts = await this.postModel.find(query);
-    if (!posts) {
-      throw new NotFoundException('Posts not founded');
+    if (!posts || posts.length === 0) {
+      throw new NotFoundException('Posts not found');
     }
     return posts;
   }

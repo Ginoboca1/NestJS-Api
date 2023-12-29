@@ -21,8 +21,14 @@ import { Response } from 'express';
 import { PostDto } from './dto/post';
 import { IPost } from 'src/common/interfaces/post';
 import { UserRequest } from 'src/common/interfaces/user-request';
-import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiResponse,
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('posts')
 @Roles(Role.ADMIN, Role.USER)
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -130,10 +136,14 @@ export class PostsController {
     status: 404,
     description: 'Posts not founded',
   })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized,you need provided a token',
+  })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async filterByCategory(
-    @Query('category') category,
-    @Query('author') author,
+    @Query('category') category: string,
+    @Query('author') author: string,
     @Res() res: Response,
   ) {
     try {
@@ -232,7 +242,7 @@ export class PostsController {
     description: "This user doesn't have any posts.",
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async getPostByUser(@Param('userId') userId, @Res() res: Response) {
+  async getPostByUser(@Param('userId') userId: string, @Res() res: Response) {
     try {
       const data = await this.postsService.getPostByUser(userId);
       return res.status(200).json(data);

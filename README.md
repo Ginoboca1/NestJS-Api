@@ -14,7 +14,7 @@ Esta API forma parte del proyecto final del Bootcamp de "Javascript en el Backen
 
 ## Requisitos
 
-Enumera aquí los requisitos necesarios para ejecutar la API, como Node.js, npm, etc.
+Para poder usar la API solo tienes que contar con Node.js y npm instalados en tu computadora.
 
 ## Instalación
 
@@ -25,7 +25,11 @@ Enumera aquí los requisitos necesarios para ejecutar la API, como Node.js, npm,
 ## Configuración
 
 1. Crea un archivo de configuración `.env` siguiendo el ejemplo de `.env.example`.
-2. Ajusta las variables de entorno según sea necesario.
+2. Ajusta las variables de entorno según sea necesario. Si necesitas la string connection a la db, puedes encontrarla en el siguiente enlace:
+http://localhost:3000/api/docs
+
+Recuerda que para poder utilizar correctamente los endpoints, tendras que obtener un bearer token a traves del Login. 
+
 
 ## Uso
 
@@ -35,5 +39,12 @@ Enumera aquí los requisitos necesarios para ejecutar la API, como Node.js, npm,
 
 ## Estructura del Proyecto
 
-Describe brevemente la estructura del proyecto, destacando los directorios más importantes y su propósito.
+La API dispone de 4 modulos principales, los cuales son:
+-Auth: este es el modulo de autenticacion, dentro se encuentra todo lo relacionado a la autenticacion de las
+entidades que pueden hacer uso de la API.
 
+-Users: este es el modulo de usuarios, dentro se encuentra todo lo relacionado a la entidad user.
+
+-Admins: este es el modulo de usuarios, dentro se encuentra todo lo relacionado a la entidad user.
+
+-Posts: este es el modulo de posts, cada entidad tiene la capacidad de crear diferentes posts. Dentro de este modulo se encuentra todo lo relacionado a los posts.
