@@ -14,13 +14,16 @@ export class AdminsService {
   async getAdmins(): Promise<User[]> {
     const users = await this.userModel.find().select('-password').lean();
     if (!users || users.length === 0) {
-      throw new NotFoundException('There are no users here');
+      throw new NotFoundException('There are no admins here');
     }
     return users;
   }
 
   async getAdminsPosts(): Promise<Post[]> {
-    const admins = await this.postModel.find().lean();
-    return admins;
+    const postsByAdmins = await this.postModel.find().lean();
+    if (!postsByAdmins) {
+      throw new NotFoundException('There are no admins posts here');
+    }
+    return postsByAdmins;
   }
 }

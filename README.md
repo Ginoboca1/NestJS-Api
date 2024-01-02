@@ -1,73 +1,50 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Nest-Api
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Esta API forma parte del proyecto final del Bootcamp de "Javascript en el Backend de Codigo Facilito".
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tabla de Contenidos
 
-## Description
+- [Requisitos](#requisitos)
+- [Instalación](#instalación)
+- [Configuración](#configuración)
+- [Uso](#uso)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Contribuir](#contribuir)
+- [Licencia](#licencia)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Requisitos
 
-## Installation
+Para poder usar la API solo tienes que contar con Node.js y npm instalados en tu computadora.
 
-```bash
-$ npm install
-```
+## Instalación
 
-## Running the app
+1. Clona este repositorio: `git clone https://github.com/Ginoboca1/NestJS-Api.git`
+2. Navega al directorio del proyecto: `cd tu-api`
+3. Instala las dependencias: `npm install`
 
-```bash
-# development
-$ npm run start
+## Configuración
 
-# watch mode
-$ npm run start:dev
+1. Crea un archivo de configuración `.env` siguiendo el ejemplo de `.env.example`.
+2. Ajusta las variables de entorno según sea necesario. Si necesitas la string connection a la db, puedes encontrarla en el siguiente enlace:
+http://localhost:3000/api/docs
 
-# production mode
-$ npm run start:prod
-```
+Recuerda que para poder utilizar correctamente los endpoints, tendras que obtener un bearer token a traves del Login. 
 
-## Test
 
-```bash
-# unit tests
-$ npm run test
+## Uso
 
-# e2e tests
-$ npm run test:e2e
+1. Inicia la aplicación: `npm start`
+2. La API estará disponible en [http://localhost:3000](http://localhost:3000) por defecto.
+3. Consulta la documentación de la API para obtener detalles sobre los puntos finales y las operaciones disponibles.
 
-# test coverage
-$ npm run test:cov
-```
+## Estructura del Proyecto
 
-## Support
+La API dispone de 4 modulos principales, los cuales son:
+-Auth: este es el modulo de autenticacion, dentro se encuentra todo lo relacionado a la autenticacion de las
+entidades que pueden hacer uso de la API.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+-Users: este es el modulo de usuarios, dentro se encuentra todo lo relacionado a la entidad user.
 
-## Stay in touch
+-Admins: este es el modulo de usuarios, dentro se encuentra todo lo relacionado a la entidad user.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+-Posts: este es el modulo de posts, cada entidad tiene la capacidad de crear diferentes posts. Dentro de este modulo se encuentra todo lo relacionado a los posts.
