@@ -15,7 +15,7 @@ import { UpdateUserDto } from './dto/update-user';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorators';
-import { Role } from 'src/common/enums/role.enum';
+import { Role } from '../../common/enums/role.enum';
 import { UserRequest } from 'src/common/interfaces/user-request';
 import {
   ApiResponse,
