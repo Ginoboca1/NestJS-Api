@@ -60,6 +60,9 @@ export class UsersController {
   async getUserById(@Param('id') id: string, @Res() res: Response) {
     try {
       const data = await this.usersService.getUserById(id);
+      if (!data) {
+        return res.status(404).json({ message: 'User not found' });
+      }
       return res.status(200).json({ data });
     } catch (error) {
       throw error;
