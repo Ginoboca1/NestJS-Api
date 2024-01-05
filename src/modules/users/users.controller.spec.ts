@@ -21,7 +21,9 @@ describe('UsersController', () => {
   let controller: UsersController;
   let service: UsersService;
 
-  const mockRequest = {} as unknown as UserRequest;
+  const mockRequest = {
+    user: { id: '123id' },
+  } as unknown as UserRequest;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -36,6 +38,35 @@ describe('UsersController', () => {
   });
 
   const mockResponse = createMockResponse();
+  const mockData = [
+    {
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      password: 'hashedPassword123',
+      role: Role.USER,
+    },
+    {
+      name: 'Jane Smith',
+      email: 'janesmith@example.com',
+      password: 'hashedPassword456',
+      role: Role.ADMIN,
+    },
+  ];
+
+  const mockUser = {
+    _id: new mongoose.Types.ObjectId(),
+    name: 'John Doe',
+    email: 'johndoe@example.com',
+    password: 'hashedPassword123',
+    role: Role.USER,
+  };
+
+  const mockUserDto = {
+    name: 'John Doe',
+    email: 'johndoe@example.com',
+    password: 'hashedPassword123',
+    role: Role.USER,
+  };
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
@@ -43,20 +74,6 @@ describe('UsersController', () => {
 
   describe('getAllUsers', () => {
     it('should return a list of users', async () => {
-      const mockData = [
-        {
-          name: 'John Doe',
-          email: 'johndoe@example.com',
-          password: 'hashedPassword123',
-          role: Role.USER,
-        },
-        {
-          name: 'Jane Smith',
-          email: 'janesmith@example.com',
-          password: 'hashedPassword456',
-          role: Role.ADMIN,
-        },
-      ];
       jest.spyOn(service, 'getUsers').mockResolvedValue(mockData);
 
       await controller.getAllUsers(mockRequest, mockResponse);
@@ -77,13 +94,6 @@ describe('UsersController', () => {
   });
 
   describe('getUserById', () => {
-    const mockUser = {
-      _id: new mongoose.Types.ObjectId(),
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      password: 'hashedPassword123',
-      role: Role.USER,
-    };
     const id = JSON.stringify(mockUser._id);
 
     it('Should return an user', async () => {
@@ -109,6 +119,26 @@ describe('UsersController', () => {
       } catch (error) {
         expect(error).toBe(mockError);
       }
+    });
+  });
+
+  describe('updateUser', () => {
+    const id = mockRequest.user.id;
+    it('Should return an updated user', async () => {
+      jest
+        .spyOn(service, 'updateUser')
+        .mockResolvedValue({ message: 'update successfully' });
+
+      await controller.updateUser(id, mockUserDto, mockResponse, mockRequest);
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'update successfully',
+      });
+    });
+    it('should return a 404 error if not found an user', async () => {
+      jest.spyOn(service, 'updateUser').mockResolvedValue(null);
+      await controller.updateUser(id, mockUserDto, mockResponse, mockRequest);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
     });
   });
 });

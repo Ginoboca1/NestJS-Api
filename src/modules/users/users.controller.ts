@@ -93,7 +93,10 @@ export class UsersController {
     try {
       const userId = req.user.id;
       const data = await this.usersService.updateUser(id, userId, body, req);
-      return res.status(200).json({ data });
+      if (!data) {
+        return res.status(404).json({ message: 'user not found' });
+      }
+      return res.status(200).json(data);
     } catch (error) {
       throw error;
     }
