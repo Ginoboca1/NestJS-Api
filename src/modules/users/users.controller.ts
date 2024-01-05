@@ -120,6 +120,9 @@ export class UsersController {
   async deleteUser(@Param('id') id: string, @Res() res: Response) {
     try {
       const data = await this.usersService.removeUser(id);
+      if (!data) {
+        return res.status(404).json({ message: 'user not found' });
+      }
       return res.status(200).json(data);
     } catch (error) {
       throw error;
