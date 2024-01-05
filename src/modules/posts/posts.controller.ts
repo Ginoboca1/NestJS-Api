@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { Role } from 'src/common/enums/role.enum';
+import { Role } from '../../common/enums/role.enum';
 import { Roles } from '../auth/decorators/roles.decorators';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Response } from 'express';
@@ -91,6 +91,9 @@ export class PostsController {
   ) {
     try {
       const data = await this.postsService.getPosts(page, limit);
+      if (!data) {
+        return res.status(404).json({ message: 'No posts here' });
+      }
       return res.status(200).json(data);
     } catch (error) {
       throw error;
