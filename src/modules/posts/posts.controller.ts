@@ -63,7 +63,10 @@ export class PostsController {
         userId,
         userName,
       });
-      return res.json(data);
+      if (!data) {
+        return res.status(404).json({ message: 'Error while create a Post' });
+      }
+      return res.status(201).json(data);
     } catch (error) {
       throw error;
     }
@@ -119,7 +122,10 @@ export class PostsController {
   ) {
     try {
       const data = await this.postsService.searchPosts(query, page, limit);
-      return res.status(200).json({ data });
+      if (!data) {
+        return res.status(404).json({ message: 'No posts here' });
+      }
+      return res.status(200).json(data);
     } catch (error) {
       throw error;
     }
@@ -168,7 +174,7 @@ export class PostsController {
     description: 'Post not founded',
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async getUserById(@Param('id') id: string, @Res() res: Response) {
+  async getPostById(@Param('id') id: string, @Res() res: Response) {
     try {
       const data = await this.postsService.getPostById(id);
       return res.status(200).json({ data });
@@ -200,7 +206,7 @@ export class PostsController {
   ) {
     try {
       const data = await this.postsService.updatePost(req, id, body);
-      res.status(201).json({ data });
+      res.status(201).json(data);
     } catch (error) {
       throw error;
     }
@@ -221,13 +227,16 @@ export class PostsController {
     description: 'Post not founded',
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async deleteUser(
+  async deletePost(
     @Param('id') id: string,
     @Res() res: Response,
     @Req() req: UserRequest,
   ) {
     try {
       const data = await this.postsService.deletePost(req, id);
+      if (!data) {
+        return res.status(404);
+      }
       return res.status(200).json(data);
     } catch (error) {
       throw error;
