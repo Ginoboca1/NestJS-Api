@@ -40,6 +40,9 @@ export class UsersController {
   async getAllUsers(@Req() req: UserRequest, @Res() res: Response) {
     try {
       const data = await this.usersService.getUsers();
+      if (!data) {
+        return res.status(404).json({ message: 'There are no users' });
+      }
       return res.status(200).json(data);
     } catch (error) {
       throw error;

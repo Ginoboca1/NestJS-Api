@@ -36,6 +36,11 @@ describe('UsersController', () => {
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith(mock.mockData);
     });
+    it('should return a 404 error if not found an user', async () => {
+      jest.spyOn(service, 'getUsers').mockResolvedValue(null);
+      await controller.getAllUsers(mock.mockRequest, mockResponse);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
+    });
     it('should propagate an error if usersService.getUsers() fails', async () => {
       const mockError = new Error('Failed to get users');
       jest.spyOn(service, 'getUsers').mockRejectedValue(mockError);

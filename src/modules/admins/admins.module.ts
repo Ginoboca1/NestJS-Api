@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AdminsService } from './admins.service';
 import { AdminsController } from './admins.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from 'src/modules/users/models/user.schema';
+import { User, UserSchema } from '../users/models/user.schema';
 import { Post, PostSchema } from '../posts/models/post.schema';
 
 @Module({

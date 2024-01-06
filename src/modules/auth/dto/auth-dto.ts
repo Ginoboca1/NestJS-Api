@@ -5,7 +5,7 @@ import {
   Matches,
   IsOptional,
 } from 'class-validator';
-import { Role } from 'src/common/enums/role.enum';
+import { Role } from '../../../common/enums/role.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class Login {

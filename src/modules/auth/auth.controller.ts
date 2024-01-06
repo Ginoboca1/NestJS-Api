@@ -21,8 +21,11 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async Signup(@Body() body: SignUp, @Res() res: Response) {
     try {
-      await this.authService.SignUp(body);
-      res.status(200).json({ message: 'SignUp successfully' });
+      const sign = await this.authService.SignUp(body);
+      if (!sign) {
+        return res.status(404).json({ message: 'Signup failed' });
+      }
+      res.status(201).json({ message: 'SignUp successfully' });
     } catch (error) {
       throw error;
     }
