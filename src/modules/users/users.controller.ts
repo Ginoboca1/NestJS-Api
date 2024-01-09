@@ -15,7 +15,7 @@ import { UpdateUserDto } from './dto/update-user';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorators';
-import { Role } from 'src/common/enums/role.enum';
+import { Role } from '../../common/enums/role.enum';
 import { UserRequest } from 'src/common/interfaces/user-request';
 import {
   ApiResponse,
@@ -40,6 +40,9 @@ export class UsersController {
   async getAllUsers(@Req() req: UserRequest, @Res() res: Response) {
     try {
       const data = await this.usersService.getUsers();
+      if (!data) {
+        return res.status(404).json({ message: 'There are no users' });
+      }
       return res.status(200).json(data);
     } catch (error) {
       throw error;
@@ -60,6 +63,9 @@ export class UsersController {
   async getUserById(@Param('id') id: string, @Res() res: Response) {
     try {
       const data = await this.usersService.getUserById(id);
+      if (!data) {
+        return res.status(404).json({ message: 'User not found' });
+      }
       return res.status(200).json({ data });
     } catch (error) {
       throw error;
@@ -90,7 +96,10 @@ export class UsersController {
     try {
       const userId = req.user.id;
       const data = await this.usersService.updateUser(id, userId, body, req);
-      return res.status(200).json({ data });
+      if (!data) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      return res.status(200).json(data);
     } catch (error) {
       throw error;
     }
@@ -108,12 +117,15 @@ export class UsersController {
     status: 400,
     description: 'Invalid User ID',
   })
-  @ApiResponse({ status: 404, description: 'User not founded' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @Delete('/:id')
   async deleteUser(@Param('id') id: string, @Res() res: Response) {
     try {
       const data = await this.usersService.removeUser(id);
+      if (!data) {
+        return res.status(404).json({ message: 'User not found' });
+      }
       return res.status(200).json(data);
     } catch (error) {
       throw error;

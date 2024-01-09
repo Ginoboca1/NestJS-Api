@@ -7,7 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../users/models/user.schema';
 import { Model } from 'mongoose';
 import { SignUp } from './dto/auth-dto';
-import { comparePassword, hashPassword } from 'src/utils/bcrypt-passwords';
+import { comparePassword, hashPassword } from '../../utils/bcrypt-passwords';
 import { JwtService } from '@nestjs/jwt';
 import { UserPayload } from 'src/common/interfaces/payload-user';
 

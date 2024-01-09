@@ -35,6 +35,7 @@ Recuerda que para poder utilizar correctamente los endpoints, tendras que obtene
 
 1. Inicia la aplicación: `npm start`
 2. La API estará disponible en [http://localhost:3000](http://localhost:3000) por defecto.
+3. En la raiz del proyecto esta incluida la coleccion a Postman, puedes importarla y utilizarla.
 3. Consulta la documentación de la API para obtener detalles sobre los puntos finales y las operaciones disponibles.
 
 ## Estructura del Proyecto

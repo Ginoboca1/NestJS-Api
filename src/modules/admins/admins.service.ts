@@ -1,7 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User } from 'src/modules/users/models/user.schema';
+import mongoose, { Model } from 'mongoose';
+import { User } from '../users/models/user.schema';
 import { Post } from '../posts/models/post.schema';
 
 @Injectable()
@@ -11,7 +15,7 @@ export class AdminsService {
     @InjectModel(Post.name) private postModel: Model<Post>,
   ) {}
 
-  async getAdmins(): Promise<User[]> {
+  async getUsers(): Promise<User[]> {
     const users = await this.userModel.find().select('-password').lean();
     if (!users || users.length === 0) {
       throw new NotFoundException('There are no admins here');
@@ -25,5 +29,20 @@ export class AdminsService {
       throw new NotFoundException('There are no admins posts here');
     }
     return postsByAdmins;
+  }
+
+  async removeUser(id: string) {
+    try {
+      if (!mongoose.isValidObjectId(id)) {
+        throw new BadRequestException('Invalid user ID');
+      }
+      const userDeleted = await this.userModel.findByIdAndDelete(id);
+      if (!userDeleted) {
+        throw new NotFoundException('User not founded');
+      }
+      return { message: 'User deleted successfully' };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

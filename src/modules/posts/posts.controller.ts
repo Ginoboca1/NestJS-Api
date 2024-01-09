@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -14,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { Role } from 'src/common/enums/role.enum';
+import { Role } from '../../common/enums/role.enum';
 import { Roles } from '../auth/decorators/roles.decorators';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Response } from 'express';
@@ -63,7 +64,10 @@ export class PostsController {
         userId,
         userName,
       });
-      return res.json(data);
+      if (!data) {
+        return res.status(404).json({ message: 'Error while create a post' });
+      }
+      return res.status(201).json(data);
     } catch (error) {
       throw error;
     }
@@ -91,6 +95,9 @@ export class PostsController {
   ) {
     try {
       const data = await this.postsService.getPosts(page, limit);
+      if (!data) {
+        return res.status(404).json({ message: 'No posts here' });
+      }
       return res.status(200).json(data);
     } catch (error) {
       throw error;
@@ -116,7 +123,10 @@ export class PostsController {
   ) {
     try {
       const data = await this.postsService.searchPosts(query, page, limit);
-      return res.status(200).json({ data });
+      if (!data) {
+        return res.status(404).json({ message: 'No posts found' });
+      }
+      return res.status(200).json(data);
     } catch (error) {
       throw error;
     }
@@ -165,9 +175,12 @@ export class PostsController {
     description: 'Post not founded',
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async getUserById(@Param('id') id: string, @Res() res: Response) {
+  async getPostById(@Param('id') id: string, @Res() res: Response) {
     try {
       const data = await this.postsService.getPostById(id);
+      if (!data) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
       return res.status(200).json({ data });
     } catch (error) {
       throw error;
@@ -186,7 +199,7 @@ export class PostsController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Post not founded',
+    description: 'Post not found',
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async updatePost(
@@ -197,9 +210,17 @@ export class PostsController {
   ) {
     try {
       const data = await this.postsService.updatePost(req, id, body);
-      res.status(201).json({ data });
+      res.status(201).json(data);
     } catch (error) {
-      throw error;
+      if (error instanceof NotFoundException) {
+        res.status(404).json({
+          message: 'Post not founded',
+          error: 'Not Found',
+          statusCode: 404,
+        });
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -215,16 +236,19 @@ export class PostsController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Post not founded',
+    description: 'Post not found',
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async deleteUser(
+  async deletePost(
     @Param('id') id: string,
     @Res() res: Response,
     @Req() req: UserRequest,
   ) {
     try {
       const data = await this.postsService.deletePost(req, id);
+      if (!data) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
       return res.status(200).json(data);
     } catch (error) {
       throw error;
