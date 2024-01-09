@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -64,7 +65,7 @@ export class PostsController {
         userName,
       });
       if (!data) {
-        return res.status(404).json({ message: 'Error while create a Post' });
+        return res.status(404).json({ message: 'Error while create a post' });
       }
       return res.status(201).json(data);
     } catch (error) {
@@ -123,7 +124,7 @@ export class PostsController {
     try {
       const data = await this.postsService.searchPosts(query, page, limit);
       if (!data) {
-        return res.status(404).json({ message: 'No posts here' });
+        return res.status(404).json({ message: 'No posts found' });
       }
       return res.status(200).json(data);
     } catch (error) {
@@ -177,6 +178,9 @@ export class PostsController {
   async getPostById(@Param('id') id: string, @Res() res: Response) {
     try {
       const data = await this.postsService.getPostById(id);
+      if (!data) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
       return res.status(200).json({ data });
     } catch (error) {
       throw error;
@@ -195,7 +199,7 @@ export class PostsController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Post not founded',
+    description: 'Post not found',
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async updatePost(
@@ -208,7 +212,15 @@ export class PostsController {
       const data = await this.postsService.updatePost(req, id, body);
       res.status(201).json(data);
     } catch (error) {
-      throw error;
+      if (error instanceof NotFoundException) {
+        res.status(404).json({
+          message: 'Post not founded',
+          error: 'Not Found',
+          statusCode: 404,
+        });
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -224,7 +236,7 @@ export class PostsController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Post not founded',
+    description: 'Post not found',
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async deletePost(
@@ -235,7 +247,7 @@ export class PostsController {
     try {
       const data = await this.postsService.deletePost(req, id);
       if (!data) {
-        return res.status(404);
+        return res.status(404).json({ message: 'Post not found' });
       }
       return res.status(200).json(data);
     } catch (error) {

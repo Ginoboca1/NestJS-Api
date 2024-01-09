@@ -39,7 +39,11 @@ describe('UsersController', () => {
     it('should return a 404 error if not found an user', async () => {
       jest.spyOn(service, 'getUsers').mockResolvedValue(null);
       await controller.getAllUsers(mock.mockRequest, mockResponse);
+
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'There are no users',
+      });
     });
     it('should propagate an error if usersService.getUsers() fails', async () => {
       const mockError = new Error('Failed to get users');
@@ -58,8 +62,8 @@ describe('UsersController', () => {
 
     it('Should return an user', async () => {
       jest.spyOn(service, 'getUserById').mockResolvedValue(mock.mockUser);
-
       await controller.getUserById(id, mockResponse);
+
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith({ data: mock.mockUser });
     });
@@ -67,7 +71,11 @@ describe('UsersController', () => {
     it('should return a 404 error if not found an user', async () => {
       jest.spyOn(service, 'getUserById').mockResolvedValue(null);
       await controller.getUserById(id, mockResponse);
+
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'User not found',
+      });
     });
 
     it('should propagate an error if usersService.getUsers() fails', async () => {
@@ -109,6 +117,9 @@ describe('UsersController', () => {
         mock.mockRequest,
       );
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'User not found',
+      });
     });
   });
 
@@ -119,6 +130,7 @@ describe('UsersController', () => {
         .spyOn(service, 'removeUser')
         .mockResolvedValue({ message: 'User deleted successfully' });
       await controller.deleteUser(id, mockResponse);
+
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: 'User deleted successfully',
@@ -129,6 +141,9 @@ describe('UsersController', () => {
       jest.spyOn(service, 'removeUser').mockResolvedValue(null);
       await controller.deleteUser(id, mockResponse);
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'User not found',
+      });
     });
   });
 });

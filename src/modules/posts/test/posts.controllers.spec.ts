@@ -7,6 +7,7 @@ import { Post } from '../models/post.schema';
 import { User } from '../../users/models/user.schema';
 import { UsersModule } from '../../users/users.module';
 import { mock } from './mockPost';
+import { NotFoundException } from '@nestjs/common';
 
 describe('PostsController', () => {
   let controller: PostsController;
@@ -54,6 +55,9 @@ describe('PostsController', () => {
         mockResponse,
       );
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'Error while create a post',
+      });
     });
 
     it('should propagate an error if usersService.getPost() fails', async () => {
@@ -84,7 +88,11 @@ describe('PostsController', () => {
     it('should return a 404 error if not found posts', async () => {
       jest.spyOn(service, 'getPosts').mockResolvedValue(null);
       await controller.getPosts(1, 10, mockResponse);
+
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'No posts here',
+      });
     });
 
     it('should propagate an error if usersService.getPost() fails', async () => {
@@ -111,6 +119,9 @@ describe('PostsController', () => {
       jest.spyOn(service, 'searchPosts').mockResolvedValue(null);
       await controller.searchPost('review', '1', '10', mockResponse);
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'No posts found',
+      });
     });
 
     it('should propagate an error if usersService.getPost() fails', async () => {
@@ -137,6 +148,9 @@ describe('PostsController', () => {
       jest.spyOn(service, 'getPostById').mockResolvedValue(null);
       await controller.getPostById('id', mockResponse);
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'Post not found',
+      });
     });
 
     it('should propagate an error if usersService.getPost() fails', async () => {
@@ -152,12 +166,13 @@ describe('PostsController', () => {
   });
 
   describe('updatePost', () => {
+    const id = mock.mockRequest.user.id;
     it('should be update a post', async () => {
       jest
         .spyOn(service, 'updatePost')
         .mockResolvedValue(mock.messageSuccessfully);
       await controller.updatePost(
-        'id',
+        id,
         mock.mockRequest,
         mock.mockPost,
         mockResponse,
@@ -167,17 +182,26 @@ describe('PostsController', () => {
     });
 
     it('should return a 404 error if not found posts', async () => {
-      jest.spyOn(service, 'updatePost').mockResolvedValue(null);
+      jest.spyOn(service, 'updatePost').mockImplementation(async () => {
+        throw new NotFoundException('Post not found');
+      });
+
       await controller.updatePost(
         'id',
         mock.mockRequest,
         mock.mockPost,
         mockResponse,
       );
+
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'Post not founded',
+        error: 'Not Found',
+        statusCode: 404,
+      });
     });
 
-    it('should propagate an error if usersService.getPost() fails', async () => {
+    it('should propagate an error if usersService.updatePost() fails', async () => {
       const mockError = new Error('Failed to get posts');
       jest.spyOn(service, 'updatePost').mockRejectedValue(mockError);
       try {
@@ -209,6 +233,9 @@ describe('PostsController', () => {
       jest.spyOn(service, 'deletePost').mockResolvedValue(null);
       await controller.deletePost('id', mockResponse, mock.mockRequest);
       expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'Post not found',
+      });
     });
 
     it('should propagate an error if usersService.getPost() fails', async () => {

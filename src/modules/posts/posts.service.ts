@@ -49,15 +49,17 @@ export class PostsService {
   async updatePost(req, idParam: string, body: IPost) {
     const { id, role } = req.user;
     const postToUpdate = await this.getPostById(idParam);
+
+    if (!postToUpdate) {
+      throw new NotFoundException('Post not found');
+    }
     if (!(postToUpdate.userId.toString() === id || role === 'admin')) {
-      throw new BadRequestException('You can only upd your own post');
+      throw new BadRequestException('You can only update your own post');
     }
     const updatedPost = await this.postModel
       .findByIdAndUpdate(idParam, body)
       .lean();
-    if (!updatedPost) {
-      throw new NotFoundException('Post not founded');
-    }
+
     return { message: 'Post updated successfully', id: updatedPost._id };
   }
 
