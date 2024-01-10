@@ -37,7 +37,7 @@ import { PostUpdateDto } from './dto/post-update';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
   @Post()
-  @ApiOperation({ summary: 'Create a post' })
+  @ApiOperation({ summary: 'Create a new post' })
   @ApiResponse({
     status: 201,
     description: 'Return a successfully message and create a post',
@@ -74,7 +74,9 @@ export class PostsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Return all posts' })
+  @ApiOperation({
+    summary: 'List all posts, supporting pagination with parameters',
+  })
   @ApiResponse({
     status: 200,
     description: 'Return a posts list',
@@ -106,7 +108,7 @@ export class PostsController {
 
   @Get('/search')
   @ApiOperation({
-    summary: 'Returns the posts that match the search parameters',
+    summary: 'Search for posts by title, content, author',
   })
   @ApiResponse({
     status: 200,
@@ -133,7 +135,7 @@ export class PostsController {
   }
 
   @Get('/filter')
-  @ApiOperation({ summary: 'Filter posts by author or category' })
+  @ApiOperation({ summary: 'Filter posts by category or author' })
   @ApiResponse({
     status: 200,
     description: 'Filter posts by author or category',
@@ -165,7 +167,7 @@ export class PostsController {
   }
 
   @Get('/:id')
-  @ApiOperation({ summary: 'Returns a post wich match with the ID' })
+  @ApiOperation({ summary: 'View details of a specific post' })
   @ApiResponse({
     status: 200,
     description: 'Returns a post wich match with the ID',
@@ -188,7 +190,7 @@ export class PostsController {
   }
 
   @Put('/:id')
-  @ApiOperation({ summary: 'Update post wich match with the ID provided' })
+  @ApiOperation({ summary: 'Update a post' })
   @ApiResponse({
     status: 200,
     description: 'Update post wich match with the ID provided',
@@ -225,7 +227,7 @@ export class PostsController {
   }
 
   @Delete('/:id')
-  @ApiOperation({ summary: 'Delete post wich match with the ID provided' })
+  @ApiOperation({ summary: 'Delete a post' })
   @ApiResponse({
     status: 200,
     description: 'Delete post wich match with the ID provided',
@@ -256,7 +258,7 @@ export class PostsController {
   }
 
   @Get('/user/:userId')
-  @ApiOperation({ summary: 'Returns posts from a specific user' })
+  @ApiOperation({ summary: ' View all posts by a specific user' })
   @ApiResponse({
     status: 200,
     description: 'Returns posts from a specific user',

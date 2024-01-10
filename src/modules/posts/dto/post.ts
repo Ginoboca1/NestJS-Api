@@ -8,7 +8,6 @@ export class PostDto {
 
   @IsString()
   @IsOptional()
-  @ApiProperty({ example: 'John Doe', description: 'authors' })
   author: string;
 
   @IsNotEmpty()

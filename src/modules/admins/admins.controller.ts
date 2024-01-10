@@ -20,7 +20,7 @@ export class AdminsController {
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/users')
-  @ApiOperation({ summary: 'Return admin list' })
+  @ApiOperation({ summary: 'Get all admins' })
   @ApiResponse({ status: 200, description: 'Return admin list' })
   @ApiResponse({
     status: 401,
@@ -42,7 +42,7 @@ export class AdminsController {
 
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @ApiOperation({ summary: 'Return posts by admins list' })
+  @ApiOperation({ summary: 'Get all admins posts' })
   @ApiResponse({ status: 200, description: 'Return posts by admins' })
   @ApiResponse({
     status: 401,
@@ -65,6 +65,8 @@ export class AdminsController {
     }
   }
 
+  @ApiOperation({ summary: 'Delete a user' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @ApiResponse({ status: 404, description: 'User not founded' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   @Delete('/users/:id')

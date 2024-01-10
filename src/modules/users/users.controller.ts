@@ -33,7 +33,7 @@ export class UsersController {
   @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
-  @ApiOperation({ summary: 'Return a users list' })
+  @ApiOperation({ summary: 'List users' })
   @ApiResponse({ status: 200, description: 'Users list' })
   @ApiResponse({ status: 404, description: 'There are no users here' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
@@ -52,7 +52,7 @@ export class UsersController {
   @Roles(Role.ADMIN, Role.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/:id')
-  @ApiOperation({ summary: 'Return user wich match with the ID provided' })
+  @ApiOperation({ summary: 'Get details of a specific user' })
   @ApiResponse({
     status: 200,
     description: 'Return user wich match with the ID provided',
@@ -75,7 +75,7 @@ export class UsersController {
   @Roles(Role.ADMIN, Role.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Put('/:id')
-  @ApiOperation({ summary: 'Update an user wich match with the ID provided' })
+  @ApiOperation({ summary: 'Update a specific user' })
   @ApiResponse({ status: 200, description: 'Update user' })
   @ApiResponse({
     status: 401,
