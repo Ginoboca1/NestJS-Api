@@ -17,6 +17,6 @@ export class PostDto {
 
   @IsNotEmpty()
   @IsArray()
-  @ApiProperty({ example: 'tech', description: 'username' })
+  @ApiProperty({ example: ['tech'], description: 'username' })
   categories: string[];
 }
