@@ -30,7 +30,7 @@ export class AdminsController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async getUsers(@Res() res: Response) {
     try {
-      const data = await this.adminService.getUsers();
+      const data = await this.adminService.getAdmins();
       if (!data) {
         return res.status(404).json(data);
       }

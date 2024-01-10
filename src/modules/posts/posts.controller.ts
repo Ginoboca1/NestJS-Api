@@ -20,7 +20,6 @@ import { Roles } from '../auth/decorators/roles.decorators';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Response } from 'express';
 import { PostDto } from './dto/post';
-import { IPost } from 'src/common/interfaces/post';
 import { UserRequest } from 'src/common/interfaces/user-request';
 import {
   ApiResponse,
@@ -28,6 +27,7 @@ import {
   ApiOperation,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { PostUpdateDto } from './dto/post-update';
 
 @ApiBearerAuth()
 @ApiTags('posts')
@@ -205,7 +205,7 @@ export class PostsController {
   async updatePost(
     @Param('id') id: string,
     @Req() req: UserRequest,
-    @Body() body: IPost,
+    @Body() body: PostUpdateDto,
     @Res() res: Response,
   ) {
     try {

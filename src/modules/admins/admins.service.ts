@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { User } from '../users/models/user.schema';
 import { Post } from '../posts/models/post.schema';
+import { Role } from '../../common/enums/role.enum';
 
 @Injectable()
 export class AdminsService {
@@ -15,20 +16,47 @@ export class AdminsService {
     @InjectModel(Post.name) private postModel: Model<Post>,
   ) {}
 
-  async getUsers(): Promise<User[]> {
-    const users = await this.userModel.find().select('-password').lean();
-    if (!users || users.length === 0) {
+  async getAdmins(): Promise<User[]> {
+    const admins = await this.userModel
+      .find({ role: 'admin' })
+      .select('-password')
+      .lean();
+    if (!admins || admins.length === 0) {
       throw new NotFoundException('There are no admins here');
     }
-    return users;
+    return admins;
   }
 
   async getAdminsPosts(): Promise<Post[]> {
-    const postsByAdmins = await this.postModel.find().lean();
-    if (!postsByAdmins) {
-      throw new NotFoundException('There are no admins posts here');
+    const postsByAdmins = await this.postModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $match: {
+            'user.role': Role.ADMIN,
+          },
+        },
+      ])
+      .exec();
+
+    if (!postsByAdmins || postsByAdmins.length === 0) {
+      throw new NotFoundException('There are not posts by admins.');
     }
-    return postsByAdmins;
+    return postsByAdmins.map((result) => ({
+      _id: result._id,
+      title: result.title,
+      author: result.author,
+      content: result.content,
+      categories: result.categories,
+      userId: result.userId,
+    }));
   }
 
   async removeUser(id: string) {

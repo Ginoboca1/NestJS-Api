@@ -29,7 +29,7 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(tokenId: string, paramId: string, body: UpdateUserDto, req) {
+  async updateUser(paramId: string, tokenId: string, body: UpdateUserDto, req) {
     const { role } = req.user;
     if (!(tokenId === paramId || role === 'admin')) {
       throw new UnauthorizedException('You can only edit your own profile');

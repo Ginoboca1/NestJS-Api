@@ -6,7 +6,8 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Post } from './models/post.schema';
-import { IPost } from '../../common/interfaces/post';
+import { UserRequest } from 'src/common/interfaces/user-request';
+import { PostUpdateDto } from './dto/post-update';
 
 @Injectable()
 export class PostsService {
@@ -46,7 +47,7 @@ export class PostsService {
     return post;
   }
 
-  async updatePost(req, idParam: string, body: IPost) {
+  async updatePost(req: UserRequest, idParam: string, body: PostUpdateDto) {
     const { id, role } = req.user;
     const postToUpdate = await this.getPostById(idParam);
 
@@ -114,10 +115,11 @@ export class PostsService {
 
   async filterByCategory(category: string, author: string) {
     let query = {};
-    if (category && author) {
-      query = { categories: category, author };
-    } else if (category) {
-      query = { categories: category };
+    const categoryParam = category.toLowerCase();
+    if (categoryParam && author) {
+      query = { categories: categoryParam, author };
+    } else if (categoryParam) {
+      query = { categories: categoryParam };
     } else if (author) {
       query = { author };
     } else {
