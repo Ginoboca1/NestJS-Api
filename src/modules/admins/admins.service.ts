@@ -43,20 +43,27 @@ export class AdminsService {
             'user.role': Role.ADMIN,
           },
         },
+        {
+          $unwind: '$user',
+        },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            author: 1,
+            content: 1,
+            categories: 1,
+            userId: 1,
+          },
+        },
       ])
       .exec();
 
     if (!postsByAdmins || postsByAdmins.length === 0) {
-      throw new NotFoundException('There are not posts by admins.');
+      throw new NotFoundException('There are no posts by admins.');
     }
-    return postsByAdmins.map((result) => ({
-      _id: result._id,
-      title: result.title,
-      author: result.author,
-      content: result.content,
-      categories: result.categories,
-      userId: result.userId,
-    }));
+
+    return postsByAdmins;
   }
 
   async removeUser(id: string) {
